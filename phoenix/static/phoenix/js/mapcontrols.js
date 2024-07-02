@@ -14,7 +14,7 @@ class BboxMapSelector {
     bboxWestElement;
 
     areaRestriction;
-
+    helpText;
     mapMessage;
 
     /*
@@ -58,21 +58,30 @@ class BboxMapSelector {
         let zoomIn = document.getElementById(oid + "-zoom-in");
         let zoomOut = document.getElementById(oid + "-zoom-out");
         let zoomReset = document.getElementById(oid + "-reset-zoom");
+        let nudgeLongitudeWest = document.getElementById(oid + "-nudge-longitude-west");
+        let nudgeLongitudeEast = document.getElementById(oid + "-nudge-longitude-east");
 
         // message
         this.mapMessage = document.getElementById(oid + "-map_message");
 
         // help text
-        let helpText = document.getElementById(oid + "-help_text");
+        this.helpText = document.getElementById(oid + "-help_text");
 
         // End of html
 
 
         if (initialExtentValues[1] < -85 || initialExtentValues[3] > 85) {
             this.mapArea = "global"
+            // Show toggle button
+            nudgeLongitudeWest.style.visibility = "inherit";
+            nudgeLongitudeEast.style.visibility = "inherit";
             this.areaRestriction = initialExtentValues;
+//            initialExtentValues = this.areaRestriction;
         } else {
             this.mapArea = "custom"
+            // Hide toggle button for non-global data
+            nudgeLongitudeWest.style.visibility = "hidden";
+            nudgeLongitudeEast.style.visibility = "hidden";
             this.areaRestriction = BboxMapSelector.transformLatLongTo3857(initialExtentValues);
         }
 
@@ -124,8 +133,8 @@ class BboxMapSelector {
         });
 
         // add the interactive layer
-        let areaRestrictionAsString = BboxMapSelector.areaRestrictionAsString(initialExtentValues)
-        this.addBBoxInteraction(helpText, areaRestrictionAsString);
+//        let areaRestrictionAsString = BboxMapSelector.areaRestrictionAsString(initialExtentValues);
+        this.addBBoxInteraction(); //areaRestrictionAsString);
 
         /*
          *
@@ -174,6 +183,18 @@ class BboxMapSelector {
             this.view.fit(this.areaRestriction);
         }).bind(this);
         zoomReset.addEventListener("click", zoomResetCallback, false);
+
+        /* toggle longitude window west button */
+        let nudgeLongitudeWestCallback = (function() {
+            this.nudgeLongitudeWindow(-90);
+        }).bind(this);
+        nudgeLongitudeWest.addEventListener("click", nudgeLongitudeWestCallback, false);
+
+        /* toggle longitude window east button */
+        let nudgeLongitudeEastCallback = (function() {
+            this.nudgeLongitudeWindow(90);
+        }).bind(this);
+        nudgeLongitudeEast.addEventListener("click", nudgeLongitudeEastCallback, false);
 
         /*
          * Other listeners
@@ -241,20 +262,29 @@ class BboxMapSelector {
         }
     }
 
+    // Update Help Text
+    updateHelpText() {
+        let areaRestrictionAsString = BboxMapSelector.areaRestrictionAsString(this.areaRestriction);
+        this.helpText.innerHTML = "Please select a valid bounding box within the following geographical boundaries: " +
+            areaRestrictionAsString + ".";
+    } 
+
     /*
      * Drawing boxes
      */
 
     // Create a box interaction
-    addBBoxInteraction(helpText, areaRestrictionAsString) {
+    addBBoxInteraction() { //areaRestrictionAsString) {
         let geometryFunction = ol.interaction.Draw.createBox();
         this.draw = new ol.interaction.Draw({
             source: this.sourceDrawing,
             type: /** @type {ol.geom.GeometryType} */ "Circle",
             geometryFunction: geometryFunction
         });
-        helpText.innerHTML = "Please select a valid bounding box within the following geographical boundaries: " +
-            areaRestrictionAsString + "."
+        this.updateHelpText();
+/*        this.helpText.innerHTML = "Please select a valid bounding box within the following geographical boundaries: " +
+            areaRestrictionAsString + ".";
+*/
 
         // On draw start we need to remove the previous feature so
         // that it doesn't show.
@@ -359,6 +389,33 @@ class BboxMapSelector {
         return true
     }
 
+    // Nudge longitude frame east or west (to allow selections across different
+    // frames, such as the Greenwich Meridian and the dateline
+    nudgeLongitudeWindow(adj) {
+        let ar = this.areaRestriction;
+
+        // Note: `adj` is the required adjustment (east or west)
+        if (adj > 0 && ar[0] == 0) {            // avoid ar[2] exceeding 360
+            adj -= 360;
+        }  else if (adj < 0 && ar[0] == -270) { // avoid ar[0] subseeding -360
+            adj += 360;
+        }
+
+        ar[0] += adj;
+        ar[2] += adj;
+
+        this.bboxWestElement.value = ar[0];
+        this.bboxSouthElement.value = ar[1];
+        this.bboxEastElement.value = ar[2];
+        this.bboxNorthElement.value = ar[3];
+        this.areaRestriction = ar;
+
+        this.setExtentAndZoom();
+        this.view.fit(this.areaRestriction);
+        this.updateMapFromTextInputs();
+        this.updateHelpText();
+    }
+
     // Validate the selected extent. If it extends beyond the area restriction
     // then
     // trim it. If it is outside the area restriction then remove it.
@@ -425,7 +482,7 @@ class BboxMapSelector {
     // Get the areaRestriction as a string
     static areaRestrictionAsString(extentValues) {
         let areaRestrictionString = "northern extent: " + extentValues[3] + ", southern extent: " +
-            extentValues[1] + ", eastern extent: " + extentValues[0] + ", western extent: " +
+            extentValues[1] + ", western extent: " + extentValues[0] + ", eastern extent: " +
             extentValues[2];
         return areaRestrictionString;
     }

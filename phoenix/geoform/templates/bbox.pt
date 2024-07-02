@@ -100,6 +100,14 @@
             <button id="${oid}-reset-zoom" type="button"
               class="btn btn-default">Reset zoom</button>
           </div>
+          <div class="btn-group" role="group" aria-label="Nudge longitude west">
+            <button id="${oid}-nudge-longitude-west" type="button"
+              class="btn btn-default">← Nudge west</button>
+          </div> 
+          <div class="btn-group" role="group" aria-label="Nudge longitude east">
+            <button id="${oid}-nudge-longitude-east" type="button"
+              class="btn btn-default">Nudge east →</button>
+          </div>
         </div> <!-- end toolbar -->
 
       </div>
