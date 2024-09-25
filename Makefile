@@ -4,8 +4,10 @@ VERSION := 0.4.1
 APP_ROOT := $(CURDIR)
 
 # Python
-SETUPTOOLS_VERSION := 41
-BUILDOUT_VERSION := 2.13.3
+SETUPTOOLS_VERSION := 74.1.2
+#41
+BUILDOUT_VERSION := 3.1.1
+#2.13.3
 
 # Buildout files and folders
 DOWNLOAD_CACHE := $(APP_ROOT)/downloads

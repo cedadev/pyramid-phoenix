@@ -1,19 +1,19 @@
-authomatic==0.1.0.post1
+authomatic
 beaker
-chameleon==3.7.4
+chameleon
 colander
 deform
 PasteDeploy
-pyramid<2.0
+pyramid
 pyramid_beaker
-pyramid_celery==3.0.0
+pyramid_celery
 pyramid-chameleon
 pyramid_deform
 pyramid_layout
 pyramid-mako
 pyramid-rpc
 pyramid_storage
-python-openid2==3.0
+python-openid2
 webhelpers2
 webhelpers2_grid
 

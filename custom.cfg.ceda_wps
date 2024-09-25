@@ -1,0 +1,40 @@
+[buildout]
+extends = buildout.cfg
+
+# debug options
+#version = noversions
+#log-level = DEBUG
+
+[settings]
+hostname = localhost
+http-port = 80
+https-port = 443
+#log-level = WARN
+
+## deployment options
+prefix = /usr/local/birdhouse
+user = phoenix
+group = users
+etc-user = root
+
+## SSL certificate options
+ssl-client-certificate = /root/cert/ceda-wps-ui_ceda_ac_uk.crt
+ssl-certificate-key = /root/cert/private.key
+ssl-trusted-certificate = /root/cert/certificate_chain.crt
+
+# phoenix admin password
+phoenix-password = dfdsfsk-U
+phoenix-secret = ScBU5H6wNZsdfsfifsuosufosd
+
+# ceda credentials
+ceda-db-creds = postgresql://user:password@host/db
+ceda-db-query = SELECT DISTINCT datasetid FROM tbdatasetjoin, tbusers WHERE accountid='{user_id}' AND tbusers.userkey=tbdatasetjoin.userkey AND removed=0;
+ceda-client-secret = OSDUFISDUFDIOSUFIOSFUSOIFUSOIFUSFOIUSFOIUSFIOUSFOIDUSFOSDFUO
+ceda-client-id = SDJFKLSDJFLSDJFLKSDFJDSLFJDSLFJS
+
+## phoenix user management
+local-user-management = false
+
+[celery]
+celeryd-concurrency = 6
+

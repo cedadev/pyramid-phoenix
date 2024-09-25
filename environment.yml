@@ -1,11 +1,10 @@
 name: pyramid-phoenix
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - pip
-  - python=3.6
-  - setuptools=41
+  - python=3.12
+  - setuptools
   - curl
   - pyopenssl
   - cryptography
@@ -16,8 +15,8 @@ dependencies:
   - pycodestyle
 # phoenix
   - nginx
-  - supervisor=4
-  - gunicorn=19
+  - supervisor
+  - gunicorn
   - requests-oauthlib
   - gevent
   - lxml
@@ -28,14 +27,14 @@ dependencies:
   - pyyaml
   - pygments
   - pytz
-  - owslib>=0.21.0
+  - owslib
   - transaction
-  - genshi=0.7
+  - genshi
   - pyjwt
 # celery
-  - celery=3.1
-  - kombu=3.0
+  - celery
+  - kombu
 # mongodb
-  - pymongo>=3.3.0
-  - mongodb>=3.4
+  - pymongo
+  - mongodb
 
