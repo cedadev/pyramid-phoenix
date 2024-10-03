@@ -2,7 +2,6 @@ from datetime import datetime
 
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPNotFound
-from pyramid.security import authenticated_userid
 from pyramid.httpexceptions import HTTPFound
 
 from deform import Form, ValidationFailure, Button
@@ -24,7 +23,7 @@ LOGGER = logging.getLogger("PHOENIX")
 class Profile(MyView):
     def __init__(self, request):
         super(Profile, self).__init__(request, name='profile', title='')
-        self.userid = self.request.matchdict.get('userid', authenticated_userid(self.request))
+        self.userid = self.request.matchdict.get('userid', self.request.authenticated_userid)
         self.tab = self.request.matchdict.get('tab', 'account')
         self.collection = self.request.db.users
         self.user = self.collection.find_one({'identifier': self.userid})

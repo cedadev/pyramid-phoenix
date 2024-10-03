@@ -1,8 +1,7 @@
 import os
 
 import colander
-from pyramid.security import authenticated_userid
-from pyramid.compat import urlparse
+import urllib.parse as urlparse
 
 
 class BBoxValidator(object):

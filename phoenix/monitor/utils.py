@@ -1,4 +1,4 @@
-from pyramid.compat import escape
+from html import escape
 from urllib.request import urlopen
 from lxml import etree
 

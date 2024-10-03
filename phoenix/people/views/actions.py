@@ -1,6 +1,5 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound
-from pyramid.security import authenticated_userid
 
 from phoenix.oauth2 import oauth2_client_factory
 
@@ -11,7 +10,7 @@ class Actions(object):
         self.session = request.session
         # settings = request.registry.settings
         self.collection = self.request.db.users
-        self.userid = self.request.matchdict.get('userid', authenticated_userid(self.request))
+        self.userid = self.request.matchdict.get('userid', self.request.authenticated_userid)
 
     @view_config(route_name='refresh_token', permission='submit')
     def refresh_token(self):

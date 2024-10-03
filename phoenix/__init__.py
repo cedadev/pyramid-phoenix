@@ -22,6 +22,7 @@ def main(global_config, **settings):
 
     # chameleon templates
     config.include('pyramid_chameleon')
+    config.include('pyramid_layout')
 
     # deform
     # config.include('pyramid_deform')

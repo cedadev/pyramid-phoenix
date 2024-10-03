@@ -10,8 +10,6 @@ from lxml import etree
 
 from owslib.wps import WPSExecution
 
-from pyramid.security import authenticated_userid
-
 from phoenix.file_upload_store import FileUploadStore
 from phoenix.geoform.widget import (
     BBoxWidget,

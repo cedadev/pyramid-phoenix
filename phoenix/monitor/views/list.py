@@ -8,7 +8,6 @@ from pymongo import ASCENDING, DESCENDING
 
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
-from pyramid.security import authenticated_userid
 
 from phoenix.grid import CustomGrid
 from phoenix.views import MyView
@@ -56,13 +55,13 @@ class JobList(MyView):
             search_filter['tags'] = 'public'
         elif access == 'private':
             search_filter['tags'] = {'$ne': 'public'}
-            search_filter['userid'] = authenticated_userid(self.request)
+            search_filter['userid'] = self.request.authenticated_userid
         elif access == 'all' and self.request.has_permission('admin'):
             pass
         else:
             if tag is not None:
                 search_filter['tags'] = tag
-            search_filter['userid'] = authenticated_userid(self.request)
+            search_filter['userid'] = self.request.authenticated_userid
         if status == 'Running':
             search_filter['status'] = {'$in': ['ProcessAccepted', 'ProcessPaused', 'ProcessStarted']}
         elif status == 'Finished':

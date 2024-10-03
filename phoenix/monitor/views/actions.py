@@ -2,7 +2,6 @@ import requests
 
 from pyramid.view import view_config, view_defaults
 from pyramid.httpexceptions import HTTPFound
-from pyramid.security import authenticated_userid
 from pyramid.response import Response
 from pyramid.response import FileIter
 
@@ -99,7 +98,7 @@ class NodeActions(object):
     @view_config(renderer='json', name='active_jobs.json')
     def active_jobs(self):
         search_filter = dict()
-        search_filter['userid'] = authenticated_userid(self.request)
+        search_filter['userid'] = self.request.authenticated_userid
         search_filter['status'] = {'$in': ['ProcessAccepted', 'ProcessPaused', 'ProcessStarted']}
         return list(self.collection.find(search_filter).sort('created', -1))
 

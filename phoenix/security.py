@@ -7,13 +7,16 @@ see pyramid security:
 from collections import OrderedDict
 
 from pyramid.authentication import AuthTktAuthenticationPolicy
+
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.security import (
     Allow,
     Everyone,
     Authenticated,
     ALL_PERMISSIONS)
-from pyramid.security import unauthenticated_userid
+
+
+
 from pyramid.settings import asbool
 from pyramid.csrf import check_csrf_token as _check_csrf_token
 
@@ -139,7 +142,9 @@ class MyAuthenticationPolicy(AuthTktAuthenticationPolicy):
 
 
 def get_user(request):
-    user_id = unauthenticated_userid(request)
+    
+    user_id = request.unauthenticated_userid
+
     if user_id is not None:
         user = request.db.users.find_one({'identifier': user_id})
         return user
