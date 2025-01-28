@@ -6,6 +6,8 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
     ssl._create_default_https_context = ssl._create_unverified_context
 
 
+from phoenix.layouts import PageLayout 
+
 def main(global_config, **settings):
     """
     This function returns a Pyramid WSGI application.
@@ -102,6 +104,8 @@ def main(global_config, **settings):
     # from owslib import wps
     # json_renderer.add_adapter(wps.WPSException, wpsexception_adapter)
     config.add_renderer('json', json_renderer)
+    
+    config.add_layout(PageLayout, 'default')
 
     config.scan('phoenix')
 
