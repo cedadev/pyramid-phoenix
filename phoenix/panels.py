@@ -37,7 +37,6 @@ def messages(context, request):
         request                    
     )
 
-
 @panel_config(name='breadcrumbs')
 def breadcrumbs(context, request):
     lm = request.layout_manager
