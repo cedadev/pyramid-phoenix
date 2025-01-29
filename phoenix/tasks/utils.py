@@ -75,6 +75,10 @@ def add_job(db, task_id, process_id, title=None, abstract=None,
         response=None,
         request=None,
     )
+
+    with open("/tmp/output", "w") as writer: 
+        writer.write(str(dir(db.jobs)))
+
     db.jobs.insert_one(job)
     return job
 

@@ -68,7 +68,7 @@ class JobList(MyView):
             search_filter['status'] = {'$in': ['ProcessSucceeded', 'ProcessFailed']}
         elif status:
             search_filter['status'] = status
-        count = len(list(self.collection.find(search_filter))) #.count()
+        count = len(list(self.collection.find(search_filter)))
         if sort == 'user':
             sort = 'userid'
         elif sort == 'process':

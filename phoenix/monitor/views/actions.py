@@ -60,7 +60,7 @@ class NodeActions(object):
 
     # @view_config(route_name='delete_all_jobs', permission='admin')
     def delete_all_jobs(self):
-        count = self.collection.count()
+        count = len(list(self.collection))
         self.collection.drop()
         self.session.flash("{0} Jobs deleted.".format(count), queue='info')
         return HTTPFound(location=self.request.route_path('monitor'))

@@ -18,7 +18,7 @@ class JobStatus(MyView):
         status = 'ProcessAccepted'
         log = None
         # is job running?
-        if self.collection.find({"identifier": self.job_id}).count() == 1:
+        if len(list(self.collection.find({"identifier": self.job_id}))) == 1:
             job = self.collection.find_one({"identifier": self.job_id})
             progress = job.get('progress', 0)
             status = job['status']

@@ -97,14 +97,14 @@ def execute_process(self, url, service_name, identifier, inputs, outputs, use_as
                 run_step += 1
             finally:
                 save_log(job)
-                db.jobs.update({'identifier': job['identifier']}, job)
+                db.jobs.replace_one({'identifier': job['identifier']}, job)
     except Exception as exc:
         LOGGER.exception("Failed to run Job")
         job['status'] = "ProcessFailed"
         job['status_message'] = "Error: {0}".format(exc)
     finally:
         save_log(job)
-        db.jobs.update({'identifier': job['identifier']}, job)
+        db.jobs.replace_one({'identifier': job['identifier']}, job)
 
     registry.notify(JobFinished(job))
     return job['status']

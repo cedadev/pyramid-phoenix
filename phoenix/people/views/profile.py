@@ -93,7 +93,7 @@ class Profile(MyView):
             for key in ['name', 'email', 'organisation', 'notes', 'group']:
                 if key in appstruct:
                     self.user[key] = appstruct.get(key)
-            self.collection.update({'identifier': self.userid}, self.user)
+            self.collection.replace_one({'identifier': self.userid}, self.user)
         except ValidationFailure as e:
             LOGGER.exception('validation of form failed.')
             return dict(form=e.render())
