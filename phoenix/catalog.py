@@ -109,7 +109,7 @@ class MongodbCatalog(Catalog):
 
     def insert_record(self, record):
         record['identifier'] = uuid.uuid4().hex
-        self.collection.save(record)
+        self.collection.insert_one(record)
 
     def harvest(self, url, service_title=None, public=False):
         try:

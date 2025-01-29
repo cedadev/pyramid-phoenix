@@ -42,7 +42,7 @@ class Processes(MyView):
         else:
             settings = self.collection.find_one() or {}
             settings.update(dict(pinned_processes=list(appstruct['pinned_processes'])))
-            self.collection.save(settings)
+            self.collection.insert_one(settings)
             self.request.registry.notify(SettingsChanged(self.request, appstruct))
             self.session.flash('Successfully updated settings!', queue='success')
         return HTTPFound(location=self.request.route_path('settings_processes'))

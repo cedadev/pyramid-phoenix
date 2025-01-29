@@ -65,7 +65,8 @@ class Account(object):
             group=User,
             creation_time=datetime.now(),
             last_login=datetime.now())
-        self.collection.save(user)
+
+        self.collection.insert_one(user)
         return self.collection.find_one({'identifier': user['identifier']})
 
     def login(self):
@@ -87,7 +88,7 @@ class Account(object):
             user['token'] = token
         user['provider'] = provider
         user['last_login'] = datetime.now()
-        self.collection.update({'login_id': login_id}, user)
+        self.collection.replace_one({'login_id': login_id}, user)
         self.session.flash("Hello <strong>{0}</strong>. Welcome to CEDA WPS.".format(escape(login_id)), queue='info')
         if provider != 'keycloak':
             # generate_access_token(self.request.registry, userid=user['identifier'])
@@ -132,7 +133,7 @@ class Account(object):
                 return self.login_failure(message=result.error.message)
             elif result.user:
                 if not (result.user.name and result.user.id):
-                    result.user.update()
+                    result.user.replace_one()
                 # Hooray, we have the user!
                 LOGGER.debug("login successful for user {}".format(result.user.name))
                 if result.provider.name == 'github':
