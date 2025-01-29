@@ -6,7 +6,7 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and
     ssl._create_default_https_context = ssl._create_unverified_context
 
 
-#from phoenix.layouts import PageLayout 
+from phoenix.layouts import PageLayout 
 
 def main(global_config, **settings):
     """
@@ -105,7 +105,8 @@ def main(global_config, **settings):
     # json_renderer.add_adapter(wps.WPSException, wpsexception_adapter)
     config.add_renderer('json', json_renderer)
     
-    #config.add_layout(PageLayout, 'default')
+    config.include('phoenix.panels')
+    config.add_layout(PageLayout, 'default')
 
     config.scan('phoenix')
 
