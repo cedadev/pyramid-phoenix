@@ -1,4 +1,4 @@
-<metal:block use-macro="main_template">
+<metal:block use-macro="load:../../../templates/layouts/default.pt"">
 
   <div metal:fill-slot="content">
     <div class="container">

@@ -35,9 +35,10 @@ class MyView(object):
         # set breadcrumbs
         for item in self.breadcrumbs():
             lm = self.request.layout_manager
-            lm.layout.add_breadcrumb(
-                route_path=item.get('route_path'),
-                title=item.get('title'))
+            if lm and lm.layout:
+                lm.layout.add_breadcrumb(
+                    route_path=item.get('route_path'),
+                    title=item.get('title'))
 
     def breadcrumbs(self):
         return [dict(route_path=self.request.route_path("home"), title="Home")]

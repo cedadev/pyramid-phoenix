@@ -1,4 +1,4 @@
-<metal:block use-macro="main_template">
+<metal:block use-macro="load:../../../phoenix/templates/layouts/default.pt">
 
   <div metal:fill-slot="css">
     <link rel="stylesheet" type="text/css" media="screen" charset="utf-8"
