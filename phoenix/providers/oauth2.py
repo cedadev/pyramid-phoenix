@@ -51,5 +51,5 @@ class KeycloakProvider(OAuth2):
 
 def create_keycloak_provider(url, realm):
     return type("MyKeycloakProvider", (KeycloakProvider,), {
-        'user_authorization_url': '{}/auth/realms/{}/protocol/openid-connect/auth'.format(url, realm),
-        'access_token_url': '{}/auth/realms/{}/protocol/openid-connect/token'.format(url, realm)})
+        'user_authorization_url': '{}/realms/{}/protocol/openid-connect/auth'.format(url, realm),
+        'access_token_url': '{}/realms/{}/protocol/openid-connect/token'.format(url, realm)})
