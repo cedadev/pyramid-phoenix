@@ -43,16 +43,17 @@ class OAuth2(object):
         resp = requests.post(
             self.introspect_url,
             data={'token': access_token},
-            auth=(self.client_id, self.client_secret))
+            auth=(self.client_id, self.client_secret),
+            verify=self.verify)
         return resp.json()
 
 
 class KeycloakClient(OAuth2):
     def __init__(self, registry):
         super(KeycloakClient, self).__init__(registry)
-        self.refresh_url = "{}/auth/realms/{}/protocol/openid-connect/token".format(
+        self.refresh_url = "{}/realms/{}/protocol/openid-connect/token".format(
             self.settings.get('keycloak.url'), self.settings.get('keycloak.realm'))
-        self.introspect_url = "{}/auth/realms/{}/protocol/openid-connect/token/introspect".format(
+        self.introspect_url = "{}/realms/{}/protocol/openid-connect/token/introspect".format(
             self.settings.get('keycloak.url'), self.settings.get('keycloak.realm'))
         self.client_id = self.settings.get('keycloak.client.id')
         self.client_secret = self.settings.get('keycloak.client.secret')
