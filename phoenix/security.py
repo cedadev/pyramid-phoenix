@@ -120,7 +120,7 @@ def authomatic_config(request):
             'consumer_key': request.registry.settings.get('keycloak.client.id'),
             'consumer_secret': request.registry.settings.get('keycloak.client.secret'),
             'access_headers': {'User-Agent': 'Phoenix'},
-            'scope': 'openid email profile',
+            'scope': ["openid email profile"],
         },
     }
 
