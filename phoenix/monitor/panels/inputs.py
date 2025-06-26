@@ -1,5 +1,7 @@
 from pyramid_layout.panel import panel_config
 
+from pyramid.renderers import render
+
 from phoenix.wps import check_status
 from phoenix.monitor.utils import escape_output
 
@@ -26,7 +28,8 @@ class Inputs(object):
         self.request = request
         self.session = self.request.session
 
-    @panel_config(name='job_inputs', renderer='phoenix:monitor/templates/monitor/panels/media.pt')
+#    @panel_config(name='job_inputs', renderer='phoenix:monitor/templates/monitor/panels/media.pt')
+#    @panel_config(name='job_inputs')
     def panel(self):
         job_id = self.request.matchdict.get('job_id')
 
@@ -53,4 +56,9 @@ class Inputs(object):
                               category=category))
 
         items = sorted(items, key=lambda item: item['identifier'], reverse=1)
-        return dict(items=items)
+        d = dict(items=items)
+        tmpl = 'phoenix:monitor/templates/monitor/panels/media.pt'
+        return render(tmpl, d, self.request) 
+
+
+

@@ -1,4 +1,5 @@
 from pyramid_layout.panel import panel_config
+from pyramid.renderers import render
 
 from phoenix.utils import time_ago_in_words
 
@@ -29,21 +30,28 @@ def job_details(request, job_id):
     return details
 
 
-@panel_config(name='job_details', renderer='phoenix:monitor/templates/monitor/panels/details.pt')
+@panel_config(name='job_details')
 def details(context, request):
     job_id = request.matchdict.get('job_id')
-    return dict(job=job_details(request, job_id=job_id))
+    d = dict(job=job_details(request, job_id=job_id))
+    tmpl = 'phoenix:monitor/templates/monitor/panels/details.pt'
+    return render(tmpl, d, request)
 
 
-@panel_config(name='job_log', renderer='phoenix:monitor/templates/monitor/panels/log.pt')
+@panel_config(name='job_log')
 def log(context, request):
     job_id = request.matchdict.get('job_id')
     job = request.db.jobs.find_one({'identifier': job_id})
-    return dict(log=job.get('log', []))
+    d = dict(log=job.get('log', []))
+    tmpl = 'phoenix:monitor/templates/monitor/panels/log.pt'
+    return render(tmpl, d, request)
 
 
-@panel_config(name='job_xml', renderer='phoenix:monitor/templates/monitor/panels/xml.pt')
+@panel_config(name='job_xml')
 def xml(context, request):
     job_id = request.matchdict.get('job_id')
     job = request.db.jobs.find_one({'identifier': job_id})
-    return dict(xml=job.get('response'), job=job)
+    d = dict(xml=job.get('response'), job=job)
+    tmpl = 'phoenix:monitor/templates/monitor/panels/xml.pt'
+    return render(tmpl, d, request)
+

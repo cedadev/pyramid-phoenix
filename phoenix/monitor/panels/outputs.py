@@ -1,5 +1,7 @@
 from pyramid_layout.panel import panel_config
 
+from pyramid.renderers import render
+
 from phoenix.wps import check_status
 from phoenix.monitor.utils import output_details, output_details_from_metalink
 
@@ -29,7 +31,7 @@ class Outputs(object):
         self.request = request
         self.session = self.request.session
 
-    @panel_config(name='job_outputs', renderer='phoenix:monitor/templates/monitor/panels/media.pt')
+#    @panel_config(name='job_outputs', renderer='phoenix:monitor/templates/monitor/panels/media.pt')
     def panel(self):
         job_id = self.request.matchdict.get('job_id')
         items = []
@@ -44,4 +46,7 @@ class Outputs(object):
         items = sorted(items, key=lambda item: item['identifier'], reverse=1)
         metalink_items = sorted(metalink_items, key=lambda item: item['reference'], reverse=1)
         metalink_items.extend(items)
-        return dict(items=metalink_items)
+        d = dict(items=metalink_items)
+        tmpl = 'phoenix:monitor/templates/monitor/panels/media.pt'
+        return render(tmpl, d, self.request)
+

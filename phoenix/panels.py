@@ -2,6 +2,9 @@ from pyramid_layout.panel import panel_config
 from pyramid.renderers import render
 
 from phoenix.utils import root_path
+from phoenix.monitor.panels import *
+from phoenix.monitor.panels.inputs import *
+from phoenix.monitor.panels.outputs import *
 
 import logging
 logger = logging.getLogger(__name__)
@@ -62,8 +65,6 @@ def footer(context, request):
         {'version': version},             
         request                                    
     )   
-    
-    
 
 
 @panel_config(name='headings')
@@ -74,9 +75,26 @@ def headings(context, request):
         return '\n'.join([lm.render_panel(name, *args, **kw) for name, args, kw in layout.headings])
     return ''
 
+
+@panel_config(name='job_inputs')
+def job_inputs(context, request):
+    inpts = Inputs(context, request)
+    return inpts.panel()
+
+@panel_config(name='job_outputs')
+def job_outputs(context, request):
+    outpts = Outputs(context, request)
+    return outpts.panel()
+
+
 def includeme(config):
     config.add_panel('phoenix.panels.breadcrumbs', 'breadcrumbs')
     config.add_panel('phoenix.panels.navbar', 'navbar')
     config.add_panel('phoenix.panels.footer', 'footer')
     config.add_panel('phoenix.panels.messages', 'messages')
+    config.add_panel('phoenix.panels.xml', 'job_xml')
+    config.add_panel('phoenix.panels.details', 'job_details')
+    config.add_panel('phoenix.panels.log', 'job_log')
+    config.add_panel('phoenix.panels.job_inputs', 'job_inputs')
+    config.add_panel('phoenix.panels.job_outputs', 'job_outputs')
     pass

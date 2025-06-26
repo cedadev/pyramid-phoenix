@@ -14,7 +14,7 @@ class Dashboard(MyView):
     @view_config(route_name='dashboard', renderer='phoenix:dashboard/templates/dashboard/dashboard.pt')
     def view(self):
         tab = self.request.matchdict.get('tab', 'overview')
-
+        if 1: return dict(active=tab)
         lm = self.request.layout_manager
         if tab == 'jobs':
             lm.layout.add_heading('dashboard_jobs')

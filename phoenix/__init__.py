@@ -106,7 +106,7 @@ def main(global_config, **settings):
     config.add_renderer('json', json_renderer)
     
     config.include('phoenix.panels')
-    config.add_layout(PageLayout, 'default')
+#    config.add_layout(PageLayout, 'default')
 
     config.scan('phoenix')
 
