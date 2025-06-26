@@ -121,6 +121,7 @@ class ExecuteProcess(MyView):
             if not self.request.user:  # not logged-in
                 return HTTPFound(location=self.request.route_url('job_status', job_id=job_id))
             else:
+                LOGGER.warning("Forwarding to monitor page...")
                 return HTTPFound(location=self.request.route_url('monitor'))
 
     def execute(self, appstruct):
@@ -141,9 +142,11 @@ class ExecuteProcess(MyView):
                 new_inputs.append((identifier, ComplexDataInput(value)))
             elif identifier in bbox_inpts:
                 crs = 'urn:ogc:def:crs:OGC:2:84'
-                new_inputs.append((identifier, BoundingBoxDataInput(value, crs=crs)))
+                LOGGER.warning(f"BBOX VALUE: {value}")
+                new_inputs.append((identifier, {"crs": crs, "bounding_box_data": value}))
             else:
                 new_inputs.append(inpt)
+
         inputs = new_inputs
         # prepare outputs
         outputs = []
@@ -164,8 +167,8 @@ class ExecuteProcess(MyView):
         # give the job a chance to start
         sleep(1)
         self.request.registry.notify(JobStarted(self.request, result.id))
-        LOGGER.debug('wps url={}'.format(self.wps.url))
-        LOGGER.debug('request inputs = {}'.format(str(inputs)))
+        LOGGER.warning('wps url={}'.format(self.wps.url))
+        LOGGER.warning('request inputs = {}'.format(str(inputs)))
         return result.id
 
     @view_config(

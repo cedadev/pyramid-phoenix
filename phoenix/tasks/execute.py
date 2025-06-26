@@ -107,4 +107,5 @@ def execute_process(self, url, service_name, identifier, inputs, outputs, use_as
         db.jobs.replace_one({'identifier': job['identifier']}, job)
 
     registry.notify(JobFinished(job))
+    LOGGER.warning("Returning job status.")
     return job['status']
