@@ -1,3 +1,4 @@
+git+https://github.com/authomatic/authomatic.git@32d2e2519aad0858ecdb4118064ec20057b5fae1
 authomatic
 beaker
 chameleon

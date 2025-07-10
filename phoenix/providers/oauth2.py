@@ -1,3 +1,7 @@
+import json
+import requests
+import jwt
+
 from authomatic.providers.oauth2 import OAuth2
 
 import logging
@@ -46,6 +50,40 @@ class KeycloakProvider(OAuth2):
     @staticmethod
     def _x_user_parser(user, data):
         LOGGER.debug('user data: {}'.format(data))
+
+        if "id_token" not in data:
+            LOGGER.warn("ID token not found in login data")
+            return
+
+        client_id = "ceda-wps-ui-ceda-ac-uk"
+        jwks_uri = (
+            "https://accounts.ceda.ac.uk/realms/ceda/protocol/openid-connect/certs"
+        )
+        issuer = "https://accounts.ceda.ac.uk/realms/ceda"
+
+        jwks = requests.get(jwks_uri, timeout=5).json()["keys"]
+
+        kid_to_key = {
+            k["kid"]: jwt.algorithms.RSAAlgorithm.from_jwk(json.dumps(k)) for k in jwks
+        }
+
+        hdr = jwt.get_unverified_header(data["id_token"])
+        public_key = kid_to_key[hdr["kid"]]
+
+        claims = jwt.decode(
+            data["id_token"],
+            key=public_key,
+            audience=client_id,
+            issuer=issuer,
+            algorithms=[hdr["alg"]],
+        )
+
+        user.id = claims.get("sid")
+        user.name = claims.get("preferred_username")
+        user.first_name = claims.get("given_name", "")
+        user.last_name = claims.get("family_name", "")
+        user.email_verified = claims.get("email_verified")
+
         return user
 
 
