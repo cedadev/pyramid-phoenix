@@ -1,6 +1,6 @@
 import json
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 
 import logging
 LOGGER = logging.getLogger("PHOENIX")
@@ -66,7 +66,7 @@ def _get_user_roles(request, user_id):
 
     with engine.connect() as conn:
         query = request.registry.settings.get("ceda.db.query")
-        query = query.replace("{user_id}", user_id)
+        query = text(query.replace("{user_id}", user_id))
         roles = set(_get_response(conn, query))
 #        roles = sorted([r for r in roles if not r.startswith("gws_") and not r.startswith("vm_")])
         roles = sorted([r for r in roles if not r.startswith("vm_")])
