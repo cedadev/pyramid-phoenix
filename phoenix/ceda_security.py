@@ -27,6 +27,11 @@ def check_ceda_permissions(request, user, processid):
         # the user is not logged or is suspended so we return False
         return False
 
+    if user.get("login_id") in role_mappings.get("globally_allowed_users", []):
+        # the user is named as being allowed to access all WPS processes
+        # even if lacking the relevant role
+        return True
+
     if processid in role_mappings.get("restricted_to_ceda_users", []):
         # the process is available to all CEDA users
         return True
